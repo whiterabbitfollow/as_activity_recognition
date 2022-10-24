@@ -58,4 +58,4 @@
 ├── README.md
 └── requirements.txt
 ```
-6. Run `dvc repro` to train the default model. Folders are specified in `config.toml`. Model input parameters are in `params.yaml`. All tested parameters are in `configs`. 
+6. Run `dvc repro` to train the default model according to the pipeline outlined in `dvc.yaml`. Folders and filenames are specified in `config.toml`. Model input parameters are in `params.yaml`. All tested parameters are in `configs`. 

@@ -11,11 +11,14 @@ model_file : model.yaml
 results: results
 scores : scores.json
 [plots]
-balance : balance.pdf
-correlation : correlation.pdf
-information : information.pdf
-dropping : dropping.pdf
-learning : learning.pdf
-cross_validation : cross_validation.pdf
-feature_importance : feature_importance.pdf
-rocauc: roc_auc.pdf
+balance : balance.png
+correlation : correlation.png
+information : information.png
+dropping : dropping.png
+learning : learning.png
+cross_validation : cross_validation.png
+feature_importance : feature_importance.png
+rocauc: roc_auc.png
+rank: rank.png
+confusion : confusion.png
+classification : classification.png

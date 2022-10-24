@@ -5,6 +5,7 @@ stages:
     deps:
     - Activity_Recognition_Logs.zip
     - pre_process.py
+    - config.toml
     outs:
     - data/
   classify:
@@ -15,14 +16,16 @@ stages:
     outs:
     - config/model.yaml
     plots:
-    - results/balance.pdf
-    - results/correlation.pdf
-    - results/information.pdf
-    - results/dropping.pdf
-    - results/learning.pdf
-    - results/cross_validation.pdf
-    - results/feature_importance.pdf
-    - results/roc_auc.pdf
+    - results/balance.png
+    - results/rank.png
+    - results/confusion.png
+    - results/classification.png
+    # - results/information.png
+    # - results/dropping.png
+    # - results/learning.png
+    # - results/cross_validation.png
+    # - results/feature_importance.png
+    # - results/roc_auc.png
     params:
     - model
     - params
