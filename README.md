@@ -15,7 +15,8 @@
 │       ├── Walking_1.txt
 ...
 │       └── Walking_5.txt
-├── main.py
+├── classify.py
+├── preprocess.py
 ├── README.md
 └── requirements.txt
 ```
@@ -57,4 +58,4 @@
 ├── README.md
 └── requirements.txt
 ```
-6. Run `main.py` to train a simple model.
+6. Run `dvc repro` to train the default model. Folders are specified in `config.toml`. Model input parameters are in `params.yaml`. All tested parameters are in `configs`. 
