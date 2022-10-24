@@ -165,4 +165,5 @@ cython_debug/
 .idea/
 /data
 /results
+!/results/.png
 /config
