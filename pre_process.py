@@ -1,7 +1,7 @@
-import configparser
 import zipfile
 from pathlib import Path
 
+import dvc.api
 import numpy as np
 import pandas as pd
 import tsfresh
@@ -110,21 +110,8 @@ def create_features_test(time_windows:Path, features:Path):
 
 if __name__ == "__main__":
     
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="config.toml")
-    args = parser.parse_args()
     
-    config = configparser.ConfigParser()
-    print("=========================================")
-    print("Reading config file...")
-    config.read(args.config)
-    for key, value in dict(config['data_paths']).items():
-        print(f"{key}: {value}")
-    print("=========================================")
-    for key, value in ENCODING.items():
-        print(f"{key}: {value}")
-    print("=========================================")
+    config = dvc.api.params_show()
     data_path = Path(config['data_paths']["data"])
     raw_path = data_path / config['data_paths']["raw"]
     acc_path = data_path / config['data_paths']["acc"]

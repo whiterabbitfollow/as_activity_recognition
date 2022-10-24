@@ -6,56 +6,56 @@ stages:
     - path: Activity_Recognition_Logs.zip
       md5: 05061832277bcebe4cde53dfd13fbde6
       size: 2843808
-    - path: config.toml
-      md5: 3d38e6e2f77d08dd3564e3c20b468437
-      size: 532
     - path: pre_process.py
-      md5: 29419b472d47af078dd51fb66401969f
-      size: 5857
+      md5: 9b0f297fb80a9e35698c17e766bc2a7d
+      size: 5280
     outs:
-    - path: data/
-      md5: a118b14c6e02f8e1502092b089a86a81.dir
+    - path: data
+      md5: 7fcef9a8928d14d03abde697744953e8.dir
       size: 41000643
       nfiles: 36
   classify:
     cmd: python3 classify.py
     deps:
     - path: classify.py
-      md5: 910e2b4e38900c03e7f4ca6b971933d8
-      size: 8693
-    - path: data/
-      md5: a118b14c6e02f8e1502092b089a86a81.dir
+      md5: 4f5d5a7bb50f571ef6d6a36fe48ab36b
+      size: 8227
+    - path: data
+      md5: 7fcef9a8928d14d03abde697744953e8.dir
       size: 41000643
       nfiles: 36
     params:
       params.yaml:
         model: sklearn.ensemble.RandomForestClassifier
         params:
-        - n_estimators: 100
-        - max_depth: 2
-        - random_state: 0
+          n_estimators: 10
+          max_depth: 1
     outs:
-    - path: config/model.yaml
-      md5: 55fd7fd92a76f968372fb782e0c5f955
-      size: 105
-      isexec: true
+    - path: experiments
+      md5: f3d6b9496758d69bdf1ed3eb6e866511.dir
+      size: 87
+      nfiles: 1
     - path: results/balance.png
       md5: 05bec5ea24b1257c684a2717305f2980
       size: 19151
       isexec: true
     - path: results/classification.png
-      md5: 3bc5118349d29259667d9fcd334b2cb2
-      size: 37334
+      md5: 292008ba612fd944be92eae25cba9f19
+      size: 36516
       isexec: true
     - path: results/confusion.png
-      md5: e7e516ec742a20fa637cb9dc21fb1634
-      size: 27441
+      md5: 2888b0e44811d66a5222775b49494bcf
+      size: 27534
       isexec: true
     - path: results/rank.png
       md5: 5ac2344df15bf81104995e52c908e956
       size: 57306
       isexec: true
     - path: results/scores.json
-      md5: 984bec3b05fc99883e19c477a5fa8667
+      md5: 3620ee5dd6510100149657abe8c166dd
       size: 169
       isexec: true
+  print:
+    cmd: cat params.yaml
+  print-params:
+    cmd: cat params.yaml

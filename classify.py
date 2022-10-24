@@ -74,15 +74,7 @@ def gen_from_tuple(obj_tuple: list, *args) -> list:
 
 if __name__ == "__main__":
     
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="config.toml")
-    args = parser.parse_args()
-    
-    config = configparser.ConfigParser()
-    
-    print("=========================================")
-    print("Reading config file...")
-    config.read(args.config)
+    config = dvc.api.params_show()
     data_path = Path(config["data_paths"]["data"])
     windows = data_path / config["data_paths"]["time"]
     print(f"Loading data from time windows folder: {windows}")
@@ -98,12 +90,6 @@ if __name__ == "__main__":
     params = dvc.api.params_show()
     model = params.pop("model")
     params = params['params']
-    param_dict = {}
-    for param in params:
-        key = list(param.keys())[0]
-        value = list(param.values())[0]
-        param_dict[key] = value
-    params = param_dict
     ###################################
     # Saves configuration to configs/ #
     ###################################
@@ -111,7 +97,7 @@ if __name__ == "__main__":
     my_hash = md5(str(obj_tuple).encode("utf-8")).hexdigest()
     dict_ = {"name" : model, "params" : params}    
     print(f"Generated model with hash: {my_hash}")
-    config_path = Path(config["result_paths"]["config"], config["result_paths"]["model_file"])
+    config_path = Path(config["result_paths"]["config"], str(my_hash)+config["result_paths"]["model_file"])
     result_path = Path(config["result_paths"]["results"], config["result_paths"]["scores"])
     config_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.parent.mkdir(parents=True, exist_ok=True)

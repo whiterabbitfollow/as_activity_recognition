@@ -1,34 +1,31 @@
-
 stages:
   preprocess:
     cmd: python3 pre_process.py
     deps:
-    - Activity_Recognition_Logs.zip
     - pre_process.py
-    - config.toml
+    - ${data_paths.zip}
     outs:
-    - data/
+    - ${data_paths.data}
   classify:
-    cmd: python3 classify.py 
+    cmd: python3 classify.py
     deps:
-    - data/
+    - ${data_paths.data}
     - classify.py
     outs:
-    - config/model.yaml
+    - ${result_paths.config}
     plots:
-    - results/balance.png
-    - results/rank.png
-    - results/confusion.png
-    - results/classification.png
-    # - results/information.png
-    # - results/dropping.png
-    # - results/learning.png
-    # - results/cross_validation.png
-    # - results/feature_importance.png
-    # - results/roc_auc.png
+    - ${result_paths.results}/${plots.balance}
+    - ${result_paths.results}/${plots.rank}
+    - ${result_paths.results}/${plots.confusion}
+    - ${result_paths.results}/${plots.classification}
+    # - ${result_paths}/{plots.information}
+    # - ${result_paths}/{plots.dropping}
+    # - ${result_paths}/{plots.learning}
+    # - ${result_paths}/{plots.cross_validation}
+    # - ${result_paths}/{plots.feature_importance}
+    # - ${result_paths}/{plots.roc_auc}
     params:
     - model
     - params
     metrics:
-    - results/scores.json
-
+    - ${result_paths.results}/${result_paths.scores}
