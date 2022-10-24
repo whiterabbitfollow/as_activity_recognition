@@ -1,7 +1,7 @@
 1. Install packages. `python -m pip install -r requirements.txt`
 
 2. Run `dvc pull && dvc repro` to train the default model according to the pipeline outlined in `dvc.yaml`. To view an outline of the graph run `dvc dag`
-Folders and filenames are specified in `config.toml`. Model input parameters are in `params.yaml`. Parameters are saved in `configs/`. Scores, plots, and a static site are available in `results/`. 
+Folders and filenames are specified in `params.yaml`. Model input parameters are in `params.yaml`. Parameters are saved in `configs/`. Scores, plots, and a static site are available in `results/`. 
 
 3. To run a new experiment, you must set the `model` and the `params` in the params.yaml file.
 ```dvc queue start```
