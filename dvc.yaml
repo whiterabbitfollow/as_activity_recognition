@@ -1,0 +1,31 @@
+
+stages:
+  preprocess:
+    cmd: python3 pre_process.py
+    deps:
+    - Activity_Recognition_Logs.zip
+    - pre_process.py
+    outs:
+    - data/
+  classify:
+    cmd: python3 classify.py 
+    deps:
+    - data/
+    - classify.py
+    outs:
+    - config/model.yaml
+    plots:
+    - results/balance.pdf
+    - results/correlation.pdf
+    - results/information.pdf
+    - results/dropping.pdf
+    - results/learning.pdf
+    - results/cross_validation.pdf
+    - results/feature_importance.pdf
+    - results/roc_auc.pdf
+    params:
+    - model
+    - params
+    metrics:
+    - results/scores.json
+

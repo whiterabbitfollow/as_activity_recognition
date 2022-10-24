@@ -1,0 +1,75 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python3 pre_process.py
+    deps:
+    - path: Activity_Recognition_Logs.zip
+      md5: 05061832277bcebe4cde53dfd13fbde6
+      size: 2843808
+    - path: pre_process.py
+      md5: 29419b472d47af078dd51fb66401969f
+      size: 5857
+      isexec: true
+    outs:
+    - path: data/
+      md5: 7dc4fb1d625a850af2c1b15c98f9fb78.dir
+      size: 41000643
+      nfiles: 36
+  classify:
+    cmd: python3 classify.py
+    deps:
+    - path: classify.py
+      md5: 0e7ead51a3ecd3ef6a97e923429f1fe0
+      size: 7615
+    - path: data/
+      md5: 7dc4fb1d625a850af2c1b15c98f9fb78.dir
+      size: 41000643
+      nfiles: 36
+    params:
+      params.yaml:
+        model: sklearn.ensemble.RandomForestClassifier
+        params:
+        - n_estimators: 100
+        - max_depth: 2
+        - random_state: 0
+    outs:
+    - path: config/model.yaml
+      md5: 55fd7fd92a76f968372fb782e0c5f955
+      size: 105
+      isexec: true
+    - path: results/balance.pdf
+      md5: 914da45c7ea2093be5ce20bba42e0db8
+      size: 11137
+      isexec: true
+    - path: results/correlation.pdf
+      md5: 70d4dcab6dbdb24368118f704e54f68d
+      size: 16579
+      isexec: true
+    - path: results/cross_validation.pdf
+      md5: 21dd6bee73ec1c591111b7ee26382eec
+      size: 22199
+      isexec: true
+    - path: results/dropping.pdf
+      md5: 4af84f55beac0ebaf87ea01b3d45f6fb
+      size: 21505
+      isexec: true
+    - path: results/feature_importance.pdf
+      md5: fd5f594a147cf6dcfa802e9485299762
+      size: 24838
+      isexec: true
+    - path: results/information.pdf
+      md5: 562db007b0ed5ae266a682125f9e25e7
+      size: 18744
+      isexec: true
+    - path: results/learning.pdf
+      md5: c4795d8ad625496856f052fbdb0ee174
+      size: 22041
+      isexec: true
+    - path: results/roc_auc.pdf
+      md5: 7059c5abf282100a14e3a60c25cb9832
+      size: 27684
+      isexec: true
+    - path: results/scores.json
+      md5: def852671151d42692dc875a2efe168d
+      size: 77
+      isexec: true
