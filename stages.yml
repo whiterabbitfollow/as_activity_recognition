@@ -1,0 +1,33 @@
+stages:
+    print:
+      cmd: cat params.yaml
+      
+    # preprocess:
+    #   cmd: python3 pre_process.py
+    #   deps:
+    #   - pre_process.py
+    #   - ${data_paths.zip}
+    #   outs:
+    #   - ${data_paths.data}
+    # classify:
+    #   cmd: python3 classify.py
+    #   deps:
+    #   - ${data_paths.data}
+    #   - classify.py
+    #   outs:
+    #   - ${result_paths.config}
+    #   plots:
+    #   - ${result_paths.results}/${plots.balance}
+    #   - ${result_paths.results}/${plots.rank}
+    #   - ${result_paths.results}/${plots.confusion}
+    #   - ${result_paths.results}/${plots.classification}
+    #   # - ${result_paths}/{plots.information}
+    #   # - ${result_paths}/{plots.dropping}
+    #   # - ${result_paths}/{plots.learning}
+    #   # - ${result_paths}/{plots.cross_validation}
+    #   # - ${result_paths}/{plots.feature_importance}
+    #   # - ${result_paths}/{plots.roc_auc}
+    #   params:
+    #   - model
+    #   metrics:
+    #   - ${result_paths.results}/${result_paths.scores}
