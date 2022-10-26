@@ -11,7 +11,7 @@ stages:
       size: 5280
     outs:
     - path: data
-      md5: 7fcef9a8928d14d03abde697744953e8.dir
+      md5: e3f21e3eb337b0307d624dc17cd491f5.dir
       size: 41000643
       nfiles: 36
   classify:

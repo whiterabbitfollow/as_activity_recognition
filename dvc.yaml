@@ -26,6 +26,5 @@ stages:
     # - ${result_paths}/{plots.roc_auc}
     params:
     - model
-    - params
     metrics:
     - ${result_paths.results}/${result_paths.scores}

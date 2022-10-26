@@ -8,7 +8,6 @@ import dvc.api
 import matplotlib.pyplot as plt
 import numpy as np
 import ruamel.yaml as yaml
-import seaborn as sns
 from pandas import DataFrame
 from sklearn.metrics import (accuracy_score, explained_variance_score,
                              f1_score, mean_absolute_error,
