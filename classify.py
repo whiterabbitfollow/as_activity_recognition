@@ -73,9 +73,7 @@ def gen_from_tuple(obj_tuple: list, *args) -> list:
 if __name__ == "__main__":
     
     config = dvc.api.params_show()
-    print(config)
     data, model = load_experiment()
-    input("Press Enter to continue")
     y_train = data['y_train']
     y_test = data['y_test']
     X_test = data['X_test']

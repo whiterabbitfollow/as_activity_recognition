@@ -9,33 +9,32 @@ preprocessing:
   window : 100
   stride : 10
   data_file : data.npz
-pipeline:
+pipeline: # Determine the sklearn pipeline order
 - preprocessor
 - feature_selector
 - model
-model:
+model: # Model
   name : sklearn.ensemble.RandomForestClassifier
   n_estimators : 10
   max_depth : 1
-preprocessor:
+preprocessor: # Centers and Scales
   name : sklearn.preprocessor.StandardScaler
   with_std : True
   with_mean : True
-feature_selector:
+feature_selector: # Selects Features
   name : sklearn.feature_selection.SelectKBest
   k: 30
-sample:
+sample: # Samples the Data
   name: data/features/data.npz
   shuffle : True
   random_state : 42
   train_size : 2500
   stratify : True
-result:
-  config: experiments
+result: # result path
   model_file: model.yaml
   path: results
   scores: scores.json
-plots:
+plots: #plots
   balance: balance.png
   rank: rank.png
   confusion: confusion.png

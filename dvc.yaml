@@ -1,6 +1,4 @@
 stages:
-  print:
-    cmd: cat params.yaml
   preprocess:
     cmd: python3 pre_process.py
     deps:
@@ -12,28 +10,26 @@ stages:
     - preprocessing.window
     - preprocessing.key
     - preprocessing.stride
-  # # classify:
-  #   cmd: python3 classify.py
-  #   deps:
-  #   - ${data_paths.data}
-  #   - classify.py
-  #   outs:
-  #   - ${result.results}
-  #   plots:
-  #   - ${result.path}/${plots.balance}
-  #   - ${result.path}/${plots.rank}
-  #   - ${result.path}/${plots.confusion}
-  #   - ${result.path}/${plots.classification}
-  #   # - ${result_paths}/{plots.information}
-  #   # - ${result_paths}/{plots.dropping}
-  #   # - ${result_paths}/{plots.learning}
-  #   # - ${result_paths}/{plots.cross_validation}
-  #   # - ${result_paths}/{plots.feature_importance}
-  #   # - ${result_paths}/{plots.roc_auc}
-  #   params:
-  #   - ${pipeline}
-  #   - ${model}
-  #   - ${preprocessor}
-  #   - ${feature_selector}
-  #   metrics:
-  #   - ${result.path}/${result_paths.scores}
+  classify:
+    cmd: python3 classify.py
+    deps:
+    - ${preprocessing.root}
+    - classify.py
+    plots:
+    - ${result.path}/${plots.balance}
+    - ${result.path}/${plots.rank}
+    - ${result.path}/${plots.confusion}
+    - ${result.path}/${plots.classification}
+    # - ${result_paths}/{plots.information}
+    # - ${result_paths}/{plots.dropping}
+    # - ${result_paths}/{plots.learning}
+    # - ${result_paths}/{plots.cross_validation}
+    # - ${result_paths}/{plots.feature_importance}
+    # - ${result_paths}/{plots.roc_auc}
+    params:
+    - pipeline
+    - model
+    - preprocessor
+    - feature_selector
+    metrics:
+    - ${result.path}/${result.scores}

@@ -7,54 +7,61 @@ stages:
       md5: 05061832277bcebe4cde53dfd13fbde6
       size: 2843808
     - path: pre_process.py
-      md5: 9b0f297fb80a9e35698c17e766bc2a7d
-      size: 5280
+      md5: 046927127d619d28f42dfdfb0ac253be
+      size: 4680
+    params:
+      params.yaml:
+        preprocessing.key: acc
+        preprocessing.stride: 10
+        preprocessing.window: 100
     outs:
     - path: data
-      md5: e3f21e3eb337b0307d624dc17cd491f5.dir
-      size: 41000643
-      nfiles: 36
+      md5: 9442889a632a0774696f7b0351435c29.dir
+      size: 26192924
+      nfiles: 32
   classify:
     cmd: python3 classify.py
     deps:
     - path: classify.py
-      md5: 4f5d5a7bb50f571ef6d6a36fe48ab36b
-      size: 8227
+      md5: 373e86587f54e11b8c4462072002096f
+      size: 6892
     - path: data
-      md5: 7fcef9a8928d14d03abde697744953e8.dir
-      size: 41000643
-      nfiles: 36
+      md5: 9442889a632a0774696f7b0351435c29.dir
+      size: 26192924
+      nfiles: 32
     params:
       params.yaml:
-        model: sklearn.ensemble.RandomForestClassifier
-        params:
+        feature_selector:
+          name: sklearn.feature_selection.SelectKBest
+          k: 30
+        model:
+          name: sklearn.ensemble.RandomForestClassifier
           n_estimators: 10
           max_depth: 1
+        pipeline:
+        - preprocessor
+        - feature_selector
+        - model
+        preprocessor:
+          name: sklearn.preprocessor.StandardScaler
+          with_std: true
+          with_mean: true
     outs:
-    - path: experiments
-      md5: f3d6b9496758d69bdf1ed3eb6e866511.dir
-      size: 87
-      nfiles: 1
     - path: results/balance.png
-      md5: 05bec5ea24b1257c684a2717305f2980
-      size: 19151
-      isexec: true
+      md5: 2d39e404c4819fd675cc72b246bf412d
+      size: 17959
     - path: results/classification.png
-      md5: 292008ba612fd944be92eae25cba9f19
-      size: 36516
-      isexec: true
+      md5: 058ccaa29c9385106850cc32a05219b9
+      size: 38031
     - path: results/confusion.png
-      md5: 2888b0e44811d66a5222775b49494bcf
-      size: 27534
-      isexec: true
+      md5: 669c276a04b4178f8bd3831f66b84c03
+      size: 27836
     - path: results/rank.png
-      md5: 5ac2344df15bf81104995e52c908e956
-      size: 57306
-      isexec: true
+      md5: 09cd36510d7586f41163b15f2f246284
+      size: 112023
     - path: results/scores.json
-      md5: 3620ee5dd6510100149657abe8c166dd
+      md5: 489dc6aff759aa09211ccd5ad1d22668
       size: 169
-      isexec: true
   print:
     cmd: cat params.yaml
   print-params:
