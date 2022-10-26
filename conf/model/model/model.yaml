@@ -1,0 +1,5 @@
+name : sklearn.ensemble.RandomForestClassifier
+n_estimators : 10,
+max_depth : 1,
+pipeline: pipeline.yaml
+    

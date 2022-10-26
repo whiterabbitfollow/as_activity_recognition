@@ -1,0 +1,2 @@
+- name : sklearn.feature_selection.SelectKBest
+- k: 30
