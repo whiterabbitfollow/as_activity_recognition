@@ -1,6 +1,0 @@
-defaults:
-- data: data
-- model/model: model
-- model/pipeline/preprocessor: preprocessor
-- model/pipeline/feature_selector: feature_selector
-- experiment : experiment

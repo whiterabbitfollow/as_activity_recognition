@@ -39,7 +39,7 @@ def extract_time_windows(file_nrs:list, path_feat:Path, path_time_windows:Path, 
     indx = np.arange(nr_data_points)
     np.random.shuffle(indx)
     dict_ = {"X" : all_data[indx, 1:], "y" : all_data[indx, 0]}
-    np.savez(Path(path_time_windows, filename), **dict_)
+    np.savez(str(Path(path_time_windows, filename)), **dict_)
     return Path(path_time_windows, filename).resolve()
 
 
@@ -88,15 +88,13 @@ def create_features_from_data(inpath:Path , outpath:Path ):
     timeseries = pd.DataFrame(X, columns=("id", "time", "x"))
     timeseries = timeseries[["id", "time", "x"]]
     features_filtered_direct = tsfresh.extract_relevant_features(timeseries, y, column_id='id', column_sort='time')
-    features_filtered_direct.to_csv(outpath, index=False)
+    np.savez(X = features_filtered_direct, y = y, file = str(outpath))
     return outpath.resolve()
 
 
 if __name__ == "__main__":
     config = dvc.api.params_show()
-    print(config)
-    # data_file = config['experiments']['data_file']
-    input("Press enter to continue")
+    data_file = config['preprocessing']['data_file']
     key = config['preprocessing']["key"]
     window_size = config['preprocessing']["window"]
     stride = config['preprocessing']["stride"]
