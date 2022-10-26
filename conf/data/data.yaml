@@ -1,5 +1,0 @@
-name: blobs
-shuffle : True
-random_state : 42
-train_size : .8
-stratify : True

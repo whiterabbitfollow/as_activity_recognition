@@ -3,7 +3,7 @@ dvc pull
 dvc dag
 dvc repro
 dvc plots show -o results
-cd results && python3 -m http.server 8000
+cd results && python -m http.server 8000
 
 
 # Still working on this. 

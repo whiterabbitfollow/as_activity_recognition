@@ -32,14 +32,16 @@ class Data(collections.namedtuple('Data', 'name, shuffle, random_state, train_si
             big_X, big_y = real[self.name](return_X_y=True, **kwargs)
         elif self.name in generated:
             big_X, big_y = generated[self.name]( **kwargs)
-        elif isinstance(self.name, Path) and self.name.exists() and str(self.name).endswith(".npz"):
-            big_X, big_y = np.load(self.name)
-        elif isinstance(self.name, Path) and self.name.exists() and str(self.name).endswith(".csv"):
+        elif isinstance(Path(self.name), Path) and Path(self.name).exists() and str(self.name).endswith(".npz"):
+            data = np.load(self.name)
+            big_X = data['X']
+            big_y = data['y']
+        elif isinstance(Path(self.name), Path) and Path(self.name).exists() and str(self.name).endswith(".csv"):
             assert "target" in self.params, "target column must be specified"
             df = pd.read_csv(self.name)
             big_X = df.drop(self.target, axis = 1)
             big_y = df[self.target]
-        elif isinstance(self.name, Path) and self.name.exists() and str(self.name).endswith(".json"):
+        elif isinstance(Path(self.name), Path) and Path(self.name).exists() and str(self.name).endswith(".json"):
             assert "target" in self.params, "target column must be specified"
             df = pd.read_json(self.name)
             big_X = df.drop(self.target, axis = 1)
@@ -56,13 +58,12 @@ yaml.add_constructor('!Data', Data)
 if __name__ == '__main__':
     document = """
     !Data
-    name: blobs
+    name: data/features/data.npz
     shuffle : True
     random_state : 42
-    train_size : 100
+    train_size : 2500
     stratify : True
     """
     data = yaml.load(document, Loader = yaml.Loader)
-    data = data(n_samples = 1000, n_features = 10)
+    data = data()
     assert "X_train" in data
-    print(data['X_train'].shape)

@@ -1,8 +1,5 @@
-[hydra]
-    enabled = False
-    config_dir = conf
 [core]
-    remote = gdrive
     autostage = true
+    remote = gdrive
 ['remote "gdrive"']
     url = gdrive://1NGoPAzlAcGauc3oc53CT8Ls9pRplRiX7

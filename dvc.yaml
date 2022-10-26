@@ -3,21 +3,23 @@ stages:
     cmd: python3 pre_process.py
     deps:
     - pre_process.py
-    - ${data_paths.zip}
+    - ${preprocessing.zip}
     outs:
-    - ${data_paths.data}
+    - ${preprocessing.root}
+    params:
+    - preprocessing.window
+    - preprocessing.key
+    - preprocessing.stride
   classify:
     cmd: python3 classify.py
     deps:
-    - ${data_paths.data}
+    - ${preprocessing.root}
     - classify.py
-    outs:
-    - ${result_paths.config}
     plots:
-    - ${result_paths.results}/${plots.balance}
-    - ${result_paths.results}/${plots.rank}
-    - ${result_paths.results}/${plots.confusion}
-    - ${result_paths.results}/${plots.classification}
+    - ${result.path}/${plots.balance}
+    - ${result.path}/${plots.rank}
+    - ${result.path}/${plots.confusion}
+    - ${result.path}/${plots.classification}
     # - ${result_paths}/{plots.information}
     # - ${result_paths}/{plots.dropping}
     # - ${result_paths}/{plots.learning}
@@ -25,7 +27,9 @@ stages:
     # - ${result_paths}/{plots.feature_importance}
     # - ${result_paths}/{plots.roc_auc}
     params:
+    - pipeline
     - model
-    - params
+    - preprocessor
+    - feature_selector
     metrics:
-    - ${result_paths.results}/${result_paths.scores}
+    - ${result.path}/${result.scores}

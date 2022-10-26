@@ -1,5 +1,4 @@
-import argparse
-import configparser
+from experiment import load_experiment
 import importlib
 from hashlib import md5
 from pathlib import Path
@@ -8,7 +7,6 @@ import dvc.api
 import matplotlib.pyplot as plt
 import numpy as np
 import ruamel.yaml as yaml
-import seaborn as sns
 from pandas import DataFrame
 from sklearn.metrics import (accuracy_score, explained_variance_score,
                              f1_score, mean_absolute_error,
@@ -75,54 +73,28 @@ def gen_from_tuple(obj_tuple: list, *args) -> list:
 if __name__ == "__main__":
     
     config = dvc.api.params_show()
-    data_path = Path(config["data_paths"]["data"])
-    windows = data_path / config["data_paths"]["time"]
-    print(f"Loading data from time windows folder: {windows}")
-    # Extract features
-    X_train = np.load(str(windows / "data_train_X.npy"))
-    y_train = np.load(str(windows / "data_train_y.npy"))
-    X_test = np.load(str(windows / "data_test_X.npy"))
-    y_test = np.load(str(windows / "data_test_y.npy"))
-    print("Data loaded")
-    ##################################
-    # Set model name and params here #
-    ##################################
-    params = dvc.api.params_show()
-    model = params.pop("model")
-    params = params['params']
-    ###################################
-    # Saves configuration to configs/ #
-    ###################################
-    obj_tuple = (model, params)
-    my_hash = md5(str(obj_tuple).encode("utf-8")).hexdigest()
-    dict_ = {"name" : model, "params" : params}    
-    print(f"Generated model with hash: {my_hash}")
-    config_path = Path(config["result_paths"]["config"], str(my_hash)+config["result_paths"]["model_file"])
-    result_path = Path(config["result_paths"]["results"], config["result_paths"]["scores"])
-    config_path.parent.mkdir(parents=True, exist_ok=True)
-    result_path.parent.mkdir(parents=True, exist_ok=True)
-    with config_path.open("w") as f:
-        yaml.dump(dict_, f)
-    ####################################
-    #     Creates object from tuple    #
-    ####################################
-    clf = gen_from_tuple(obj_tuple)
+    data, model = load_experiment()
+    y_train = data['y_train']
+    y_test = data['y_test']
+    X_test = data['X_test']
+    X_train = data['X_train']
+    
     ####################################
     #             Science              #
     ####################################
-    clf.fit(X_train, y_train)
+    model.fit(X_train, y_train)
     score_dict = {}
     for key, value in CLASSIFIER_SCORERS.items():
         try:
-            score_dict.update({key :value(y_test, clf.predict(X_test))})
+            score_dict.update({key :value(y_test, model.predict(X_test))})
         except ValueError as e:
             if "average=" in str(e):
-                score_dict.update({key : value(y_test, clf.predict(X_test), average='weighted')})
+                score_dict.update({key : value(y_test, model.predict(X_test), average='weighted')})
     
-    del temp_object
     ####################################
     #             Saving               #
     ####################################
+    result_path = Path(config['result']['path'], config['result']['scores'])
     df = DataFrame()
     df['score'] = score_dict.values()
     df['scorer'] = score_dict.keys()
@@ -149,12 +121,12 @@ if __name__ == "__main__":
     visualizer.fit(y_train)
     visualizer.show(outpath = str(parent / config['plots']['balance']))  
     # Confusion Matrix
-    visualizer = ConfusionMatrix(clf, classes=list(ENCODING.keys()))
+    visualizer = ConfusionMatrix(model, classes=list(ENCODING.keys()))
     visualizer.fit(X_train, y_train)
     visualizer.score(X_test, y_test)
     visualizer.show(outpath = str(parent / config['plots']['confusion']))
     # Classification Report
-    visualizer = ClassificationReport(clf, classes=list(ENCODING.keys()))
+    visualizer = ClassificationReport(model, classes=list(ENCODING.keys()))
     visualizer.fit(X_train, y_train)
     visualizer.score(X_test, y_test)
     visualizer.show(outpath = str(parent / config['plots']['classification']))

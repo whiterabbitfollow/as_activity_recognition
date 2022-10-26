@@ -1,20 +1,40 @@
-model: sklearn.ensemble.RandomForestClassifier
-params:
-  n_estimators: 10
-  max_depth: 1
-data_paths:
-  data: data
+preprocessing:
+  root: data
   raw: raw
   acc: raw_acc
   time: time_windows
   feat: features
   zip: Activity_Recognition_Logs.zip
-result_paths:
-  config: experiments
+  key: acc
+  window : 100
+  stride : 10
+  data_file : data.npz
+pipeline: # Determine the sklearn pipeline order
+- preprocessor
+- feature_selector
+- model
+model: # Model
+  name : sklearn.ensemble.RandomForestClassifier
+  n_estimators : 10
+  max_depth : 1
+preprocessor: # Centers and Scales
+  name : sklearn.preprocessor.StandardScaler
+  with_std : True
+  with_mean : True
+feature_selector: # Selects Features
+  name : sklearn.feature_selection.SelectKBest
+  k: 30
+sample: # Samples the Data
+  name: data/features/data.npz
+  shuffle : True
+  random_state : 42
+  train_size : 2500
+  stratify : True
+result: # result path
   model_file: model.yaml
-  results: results
+  path: results
   scores: scores.json
-plots:
+plots: #plots
   balance: balance.png
   rank: rank.png
   confusion: confusion.png

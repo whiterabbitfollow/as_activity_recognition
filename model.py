@@ -4,7 +4,7 @@ import importlib
 from sklearn.pipeline import Pipeline
 from dataclasses import dataclass
 
-class Model(collections.namedtuple('Model', ('model', 'pipeline', 'defence'), defaults=(None, None))):
+class Model(collections.namedtuple('Model', ('model', 'pipeline', 'preprocessor', 'feature_selector'), defaults=(None, None, None))):
     def __new__(cls, loader, node):
         return super().__new__(cls, **loader.construct_mapping(node))
 
@@ -18,14 +18,11 @@ class Model(collections.namedtuple('Model', ('model', 'pipeline', 'defence'), de
 #     time_series : bool = False
     
 
-    def gen_from_dict(self, obj_dict: dict, *args) -> list:
+    def gen_from_tup(self, obj_tuple: tuple, *args) -> list:
         """
         Imports and initializes objects from yml file. Returns a list of instantiated objects.
         :param obj_tuple: (full_object_name, params)
         """
-        key = list(obj_dict.keys())[0]
-        value = obj_dict[key]
-        obj_tuple = (key, value)
         library_name = ".".join(obj_tuple[0].split(".")[:-1])
         class_name = obj_tuple[0].split(".")[-1]
         global tmp_library
@@ -51,41 +48,45 @@ class Model(collections.namedtuple('Model', ('model', 'pipeline', 'defence'), de
     
     def load(self):
         # Initialize model
-        model = self.gen_from_dict(self.model)
+        tup = (self.model.pop('name'), self.model)
+        model = self.gen_from_tup(tup)
         pipe_list = []
         i = 0
         # Initialize pipeline
         if  self.pipeline is not None:
             if "cache" in self.pipeline:
                 cache = self.pipeline.pop("cache")
-            for step in self.pipeline:
-                name = list(step.keys())[i]
-                component = step[name]
-                obj_ = self.gen_from_dict(component)
+            for name in self.pipeline:
+                print(f"name is: {name}")
+                component = getattr(self, name)
+                print(component)
+                input("Inside pipeline loop")
+                type_ = component.pop("name")
+                obj_ = self.gen_from_tup((type_, component))
                 pipe_list.append((name, obj_))
                 i += 0
             pipe_list.append(("model", model))
             model = Pipeline(pipe_list)
-        if self.defence is not None:
-            raise NotImplementedError("Defences are not implemented yet")
         return model
     
     
 yaml.add_constructor('!Model', Model)
 if __name__ == '__main__':
     document = """\
-    model:
-        sklearn.ensemble.RandomForestClassifier:
-            n_estimators : 10,
-            max_depth : 1,
     pipeline:
-        - preprocessor:
-            sklearn.preprocessing.StandardScaler:
-                with_mean : True
-                with_std : True
-        - feature_selector:
-            sklearn.feature_selection.SelectKBest:
-                k: 30
+    - preprocessor
+    - feature_selector
+    model:
+        name : sklearn.ensemble.RandomForestClassifier
+        n_estimators : 10
+        max_depth : 1
+    preprocessor:
+        name : sklearn.preprocessing.StandardScaler
+        with_std : True
+        with_mean : True
+    feature_selector:
+        name : sklearn.feature_selection.SelectKBest
+        k: 30
     """
     document = "!Model\n" + document
     print(document)
