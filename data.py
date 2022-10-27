@@ -19,7 +19,7 @@ real = {
     "wine": load_wine,
 }
 
-class Data(collections.namedtuple('Data', 'name, shuffle, random_state, train_size, stratify')):
+class Data(collections.namedtuple('Data', 'name, shuffle, random_state, train_size, stratify, target', defaults = (None,)):
     def __new__(cls, loader, node):
         return super().__new__(cls, **loader.construct_mapping(node))
         
